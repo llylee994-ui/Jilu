@@ -1,6 +1,9 @@
 # Project requirement docs (local only, not part of codebase)
 *.md
 
+# Claude config
+.claude/
+
 # Dependencies
 node_modules/
 .pnp/
