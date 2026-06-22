@@ -1,0 +1,48 @@
+# Project requirement docs (local only, not part of codebase)
+*.md
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+build/
+dist/
+*.apk
+*.aab
+*.ipa
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.production
+
+# React Native
+metro-cache/
+*.jsbundle
+*.hbc
+
+# Flutter
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+
+# Testing
+coverage/
+
+# Debug
+*.log
