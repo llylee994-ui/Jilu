@@ -1,5 +1,10 @@
 # Project requirement docs (local only, not part of codebase)
-*.md
+/00_项目概览与架构索引.md
+/01_核心数据字典_Schema.md
+/02_本地推理与过滤逻辑.md
+/03_交互与UI_UX规范.md
+/04_测试验收标准.md
+/PLAN.md
 
 # Claude config
 .claude/

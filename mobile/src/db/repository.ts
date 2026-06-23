@@ -3,7 +3,14 @@
  * expo-sqlite 版本的完整数据库操作
  */
 import * as SQLite from 'expo-sqlite';
-import { v4 as uuidv4 } from 'uuid';
+
+/** 简易 UUID v4 生成（替代 uuid 包，避免 RN 兼容问题） */
+function generateUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
 import type {
   RawCapture,
   RawCaptureInsert,
@@ -55,7 +62,7 @@ export async function insertMemory(
   db: SQLite.SQLiteDatabase,
   data: MemoryInsert
 ): Promise<Memory> {
-  const vgid = data.version_group_id || uuidv4();
+  const vgid = data.version_group_id || generateUUID();
   const vn = data.version_number || 1;
 
   const result = await db.runAsync(
