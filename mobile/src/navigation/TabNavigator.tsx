@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { ChatScreen } from '../screens/ChatScreen';
 import { MemoryListScreen } from '../screens/MemoryListScreen';
 import { PendingItemsScreen } from '../screens/PendingItemsScreen';
 import { TrashScreen } from '../screens/TrashScreen';
@@ -31,12 +32,12 @@ export function TabNavigator() {
       }}
     >
       <Tab.Screen
-        name="PendingItems"
-        component={PendingItemsScreen}
+        name="Chat"
+        component={ChatScreen}
         options={{
-          tabBarLabel: '待整理',
+          tabBarLabel: '聊天',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="archive-outline" size={size} color={color} />
+            <Ionicons name="chatbubble-ellipses-outline" size={size} color={color} />
           ),
         }}
       />
@@ -47,6 +48,16 @@ export function TabNavigator() {
           tabBarLabel: '记忆库',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="library-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="PendingItems"
+        component={PendingItemsScreen}
+        options={{
+          tabBarLabel: '待整理',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="archive-outline" size={size} color={color} />
           ),
         }}
       />
