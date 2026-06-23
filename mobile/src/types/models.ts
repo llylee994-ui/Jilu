@@ -150,6 +150,29 @@ export type AttachmentInsert = Pick<
   'memory_id' | 'raw_capture_id' | 'file_name' | 'file_path' | 'mime_type' | 'file_size' | 'thumbnail_path'
 >;
 
+// ---- 表 I：conversations（会话） ----
+
+export interface Conversation {
+  id: number;
+  title: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// ---- 表 J：messages（聊天消息） ----
+
+export type MessageRole = 'user' | 'agent';
+export type MessageType = 'chat' | 'memory_saved';
+
+export interface Message {
+  id: number;
+  conversation_id: number;
+  role: MessageRole;
+  text: string;
+  type: MessageType;
+  created_at: string;
+}
+
 // ---- 硬规则过滤器返回类型 ----
 
 export interface FilterResult {

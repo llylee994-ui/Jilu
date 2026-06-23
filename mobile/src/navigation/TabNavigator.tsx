@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { ChatScreen } from '../screens/ChatScreen';
+import { ChatStack } from './ChatStack';
 import { MemoryListScreen } from '../screens/MemoryListScreen';
 import { PendingItemsScreen } from '../screens/PendingItemsScreen';
 import { TrashScreen } from '../screens/TrashScreen';
@@ -32,8 +32,8 @@ export function TabNavigator() {
       }}
     >
       <Tab.Screen
-        name="Chat"
-        component={ChatScreen}
+        name="ChatStack"
+        component={ChatStack}
         options={{
           tabBarLabel: '聊天',
           tabBarIcon: ({ color, size }) => (

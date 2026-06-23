@@ -222,3 +222,86 @@ export async function insertAttachment(
     result.lastInsertRowId,
   ])) as unknown as Attachment;
 }
+
+// ====== conversations ======
+
+export interface Conversation {
+  id: number;
+  title: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function createConversation(
+  db: SQLite.SQLiteDatabase,
+  title: string = '新对话'
+): Promise<Conversation> {
+  const result = await db.runAsync(
+    'INSERT INTO conversations (title) VALUES (?)',
+    [title]
+  );
+  return (await db.getFirstAsync('SELECT * FROM conversations WHERE id = ?', [
+    result.lastInsertRowId,
+  ])) as unknown as Conversation;
+}
+
+export async function getConversations(
+  db: SQLite.SQLiteDatabase
+): Promise<Conversation[]> {
+  return (await db.getAllAsync(
+    'SELECT * FROM conversations ORDER BY updated_at DESC'
+  )) as unknown as Conversation[];
+}
+
+export async function updateConversationTitle(
+  db: SQLite.SQLiteDatabase,
+  id: number,
+  title: string
+): Promise<void> {
+  await db.runAsync(
+    "UPDATE conversations SET title = ?, updated_at = datetime('now') WHERE id = ?",
+    [title, id]
+  );
+}
+
+export async function deleteConversation(
+  db: SQLite.SQLiteDatabase,
+  id: number
+): Promise<void> {
+  await db.runAsync('DELETE FROM conversations WHERE id = ?', [id]);
+}
+
+// ====== messages ======
+
+export interface MessageRow {
+  id: number;
+  conversation_id: number;
+  role: 'user' | 'agent';
+  text: string;
+  type: 'chat' | 'memory_saved';
+  created_at: string;
+}
+
+export async function insertMessage(
+  db: SQLite.SQLiteDatabase,
+  data: { conversation_id: number; role: 'user' | 'agent'; text: string; type?: 'chat' | 'memory_saved' }
+): Promise<MessageRow> {
+  const result = await db.runAsync(
+    'INSERT INTO messages (conversation_id, role, text, type) VALUES (?, ?, ?, ?)',
+    [data.conversation_id, data.role, data.text, data.type || 'chat']
+  );
+  return (await db.getFirstAsync('SELECT * FROM messages WHERE id = ?', [
+    result.lastInsertRowId,
+  ])) as unknown as MessageRow;
+}
+
+export async function getMessagesByConversation(
+  db: SQLite.SQLiteDatabase,
+  conversationId: number
+): Promise<MessageRow[]> {
+  return (await db.getAllAsync(
+    'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
+    [conversationId]
+  )) as unknown as MessageRow[];
+}
+

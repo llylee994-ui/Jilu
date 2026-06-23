@@ -27,6 +27,10 @@
         "projectId": "d2ed5624-f0da-460a-bc8c-08e13be1298f"
       }
     },
-    "owner": "llylee994-ui"
+    "owner": "llylee994-ui",
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
   }
 }
