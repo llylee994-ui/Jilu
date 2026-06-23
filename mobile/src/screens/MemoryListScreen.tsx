@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getDatabase } from '../db/database';
@@ -18,6 +18,7 @@ export function MemoryListScreen() {
   const navigation = useNavigation<NavProp>();
   const [memories, setMemories] = useState<Memory[]>([]);
   const [filter, setFilter] = useState<MemoryCategory | null>(null);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   useFocusEffect(
@@ -38,6 +39,18 @@ export function MemoryListScreen() {
     }, [filter])
   );
 
+  // 搜索过滤（客户端侧，基于已加载的分类数据）
+  const filteredMemories = useMemo(() => {
+    if (!search.trim()) return memories;
+    const kw = search.trim().toLowerCase();
+    return memories.filter(
+      (m) =>
+        m.title.toLowerCase().includes(kw) ||
+        m.content.toLowerCase().includes(kw) ||
+        m.custom_tags.toLowerCase().includes(kw)
+    );
+  }, [memories, search]);
+
   const handlePress = (memory: Memory) => {
     navigation.navigate('DetailEdit', { memoryId: memory.id });
   };
@@ -54,34 +67,61 @@ export function MemoryListScreen() {
 
   return (
     <ScreenWrapper title="记忆库" rightAction={newButton}>
+      {/* 搜索栏 */}
+      <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4 }}>
+        <TextInput
+          style={{
+            backgroundColor: colors.cardBg,
+            borderRadius: 10,
+            paddingHorizontal: 14,
+            paddingVertical: 10,
+            fontSize: 14,
+            color: colors.primaryText,
+            borderWidth: 1,
+            borderColor: colors.divider,
+          }}
+          placeholder="搜索记忆..."
+          placeholderTextColor={colors.secondaryText}
+          value={search}
+          onChangeText={setSearch}
+          clearButtonMode="while-editing"
+        />
+      </View>
+
       <CategoryChipBar selected={filter} onSelect={setFilter} />
 
       {loading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color={colors.accent} />
         </View>
-      ) : memories.length === 0 ? (
+      ) : filteredMemories.length === 0 ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 32 }}>
-          <Text style={{ fontSize: 32, marginBottom: 12 }}>✨</Text>
-          <Text style={{ fontSize: 15, color: colors.secondaryText, textAlign: 'center' }}>
-            还没有记忆，去复制点工作内容吧
+          <Text style={{ fontSize: 32, marginBottom: 12 }}>
+            {search ? '🔍' : '✨'}
           </Text>
-          <TouchableOpacity
-            onPress={handleNew}
-            style={{
-              marginTop: 20,
-              backgroundColor: colors.accent,
-              borderRadius: 20,
-              paddingVertical: 12,
-              paddingHorizontal: 24,
-            }}
-          >
-            <Text style={{ color: '#FFFFFF', fontWeight: '700' }}>＋ 手动添加</Text>
-          </TouchableOpacity>
+          <Text style={{ fontSize: 15, color: colors.secondaryText, textAlign: 'center' }}>
+            {search
+              ? `没有找到包含"${search}"的记忆`
+              : '还没有记忆，去复制点工作内容吧'}
+          </Text>
+          {!search && (
+            <TouchableOpacity
+              onPress={handleNew}
+              style={{
+                marginTop: 20,
+                backgroundColor: colors.accent,
+                borderRadius: 20,
+                paddingVertical: 12,
+                paddingHorizontal: 24,
+              }}
+            >
+              <Text style={{ color: '#FFFFFF', fontWeight: '700' }}>＋ 手动添加</Text>
+            </TouchableOpacity>
+          )}
         </View>
       ) : (
         <FlatList
-          data={memories}
+          data={filteredMemories}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <MemoryCard memory={item} onPress={handlePress} />}
           contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}

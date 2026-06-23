@@ -1,14 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
 import { ChatStack } from './ChatStack';
 import { MemoryListScreen } from '../screens/MemoryListScreen';
 import { PendingItemsScreen } from '../screens/PendingItemsScreen';
 import { TrashScreen } from '../screens/TrashScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { AppIcon, type IconName } from '../components/AppIcon';
 import { useAppColors } from '../theme/colors';
 
 const Tab = createBottomTabNavigator();
+
+type TabIconName = 'tab-chat' | 'tab-library' | 'tab-archive' | 'tab-trash' | 'tab-settings';
 
 export function TabNavigator() {
   const colors = useAppColors();
@@ -37,7 +39,7 @@ export function TabNavigator() {
         options={{
           tabBarLabel: '聊天',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble-ellipses-outline" size={size} color={color} />
+            <AppIcon name="tab-chat" size={size} tintColor={color} />
           ),
         }}
       />
@@ -47,7 +49,7 @@ export function TabNavigator() {
         options={{
           tabBarLabel: '记忆库',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="library-outline" size={size} color={color} />
+            <AppIcon name="tab-library" size={size} tintColor={color} />
           ),
         }}
       />
@@ -57,7 +59,7 @@ export function TabNavigator() {
         options={{
           tabBarLabel: '待整理',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="archive-outline" size={size} color={color} />
+            <AppIcon name="tab-archive" size={size} tintColor={color} />
           ),
         }}
       />
@@ -67,7 +69,7 @@ export function TabNavigator() {
         options={{
           tabBarLabel: '回收站',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trash-outline" size={size} color={color} />
+            <AppIcon name="tab-trash" size={size} tintColor={color} />
           ),
         }}
       />
@@ -77,7 +79,7 @@ export function TabNavigator() {
         options={{
           tabBarLabel: '设置',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
+            <AppIcon name="tab-settings" size={size} tintColor={color} />
           ),
         }}
       />

@@ -136,6 +136,18 @@ export function ChatScreen() {
     }
   };
 
+  const formatChatTime = (ts: number): string => {
+    const d = new Date(ts);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    if (isToday) return `${hh}:${mm}`;
+    const M = d.getMonth() + 1;
+    const D = d.getDate();
+    return `${M}/${D} ${hh}:${mm}`;
+  };
+
   const renderMessage = ({ item }: { item: ChatMessage }) => {
     const isUser = item.role === 'user';
     const isMemorySaved = item.type === 'memory_saved';
@@ -178,6 +190,19 @@ export function ChatScreen() {
             {item.text}
           </Text>
         </View>
+
+        {/* 时间戳 */}
+        <Text
+          style={{
+            fontSize: 10,
+            color: colors.secondaryText,
+            marginTop: 3,
+            marginLeft: isUser ? 0 : 4,
+            marginRight: isUser ? 4 : 0,
+          }}
+        >
+          {formatChatTime(item.timestamp)}
+        </Text>
       </View>
     );
   };
