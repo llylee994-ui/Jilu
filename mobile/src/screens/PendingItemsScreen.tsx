@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Alert } from
 import { useFocusEffect } from '@react-navigation/native';
 import { getDatabase } from '../db/database';
 import { getPendingRawCaptures, updateRawCaptureStatus, insertMemory, moveToRecycleBin } from '../db/repository';
+import { ScreenWrapper } from '../components/ScreenWrapper';
 import { hardFilter } from '../types';
 import { MockLlmService } from '../types';
 import { useAppColors } from '../theme/colors';
@@ -35,7 +36,6 @@ export function PendingItemsScreen() {
     let trashed = 0, stored = 0, pending = 0;
 
     for (const item of items) {
-      // 硬规则
       const filterResult = hardFilter(item.content);
       if (filterResult.verdict === 'TRASH') {
         await moveToRecycleBin(db, {
@@ -55,7 +55,7 @@ export function PendingItemsScreen() {
         const category = await llm.classifyContent(item.content);
         const title = await llm.generateTitle(item.content);
         await insertMemory(db, {
-          version_group_id: '', // 由 repository 自动生成
+          version_group_id: '',
           title,
           content: item.content,
           category,
@@ -81,7 +81,6 @@ export function PendingItemsScreen() {
       }
     }
 
-    // 刷新列表
     const remaining = await getPendingRawCaptures(db);
     setItems(remaining);
     setProcessing(false);
@@ -125,19 +124,10 @@ export function PendingItemsScreen() {
     setItems((prev) => prev.filter((i) => i.id !== item.id));
   };
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.accent} />
-      </View>
-    );
-  }
-
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* 顶部智能整理按钮 */}
+    <ScreenWrapper title="待整理">
       {items.length > 0 && (
-        <View style={{ padding: 16 }}>
+        <View style={{ padding: 16, paddingTop: 4 }}>
           <TouchableOpacity
             onPress={handleSmartOrganize}
             disabled={processing}
@@ -155,7 +145,11 @@ export function PendingItemsScreen() {
         </View>
       )}
 
-      {items.length === 0 ? (
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={colors.accent} />
+        </View>
+      ) : items.length === 0 ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 32 }}>
           <Text style={{ fontSize: 32, marginBottom: 12 }}>🎉</Text>
           <Text style={{ fontSize: 15, color: colors.secondaryText, textAlign: 'center' }}>
@@ -213,6 +207,6 @@ export function PendingItemsScreen() {
           contentContainerStyle={{ paddingBottom: 24 }}
         />
       )}
-    </View>
+    </ScreenWrapper>
   );
 }

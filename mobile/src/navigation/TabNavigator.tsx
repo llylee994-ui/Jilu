@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { MemoryListScreen } from '../screens/MemoryListScreen';
 import { PendingItemsScreen } from '../screens/PendingItemsScreen';
 import { TrashScreen } from '../screens/TrashScreen';
@@ -8,13 +8,6 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { useAppColors } from '../theme/colors';
 
 const Tab = createBottomTabNavigator();
-
-function TabIcon({ label, focused }: { label: string; focused: boolean }) {
-  const colors = useAppColors();
-  return (
-    <Text style={{ fontSize: 18, opacity: focused ? 1 : 0.4 }}>{label}</Text>
-  );
-}
 
 export function TabNavigator() {
   const colors = useAppColors();
@@ -42,7 +35,9 @@ export function TabNavigator() {
         component={PendingItemsScreen}
         options={{
           tabBarLabel: '待整理',
-          tabBarIcon: ({ focused }) => <TabIcon label="📥" focused={focused} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="archive-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -50,7 +45,9 @@ export function TabNavigator() {
         component={MemoryListScreen}
         options={{
           tabBarLabel: '记忆库',
-          tabBarIcon: ({ focused }) => <TabIcon label="🏠" focused={focused} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="library-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -58,7 +55,9 @@ export function TabNavigator() {
         component={TrashScreen}
         options={{
           tabBarLabel: '回收站',
-          tabBarIcon: ({ focused }) => <TabIcon label="🗑️" focused={focused} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="trash-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -66,7 +65,9 @@ export function TabNavigator() {
         component={SettingsScreen}
         options={{
           tabBarLabel: '设置',
-          tabBarIcon: ({ focused }) => <TabIcon label="⚙️" focused={focused} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { getDatabase } from '../db/database';
-import { getMemoryById } from '../db/repository';
+import { getMemoryById, insertMemory } from '../db/repository';
 import { MEMORY_CATEGORIES, type Memory, type MemoryCategory } from '../types';
 import { useAppColors } from '../theme/colors';
 import type { RootStackParamList } from '../navigation/RootNavigator';
@@ -23,18 +23,21 @@ export function DetailEditScreen() {
   const route = useRoute<RouteProps>();
   const { memoryId } = route.params;
 
+  const isNew = !memoryId; // true = 新建模式，false = 编辑模式
+
   const [memory, setMemory] = useState<Memory | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState<MemoryCategory>('流程事');
   const [tags, setTags] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!isNew);
 
+  // 编辑模式：加载已有记忆
   useEffect(() => {
+    if (isNew) return;
     async function load() {
-      if (!memoryId) return;
       const db = await getDatabase();
-      const mem = await getMemoryById(db, memoryId);
+      const mem = await getMemoryById(db, memoryId!);
       if (mem) {
         setMemory(mem);
         setTitle(mem.title);
@@ -48,18 +51,39 @@ export function DetailEditScreen() {
   }, [memoryId]);
 
   const handleSave = async () => {
-    // V1: 简单更新标题、内容、分类、标签
-    // 注：版本迭代逻辑在 V2 完整实现，此处先直接更新
-    if (!memory) return;
+    if (!content.trim()) {
+      Alert.alert('内容不能为空', '请输入记忆内容');
+      return;
+    }
+
     const db = await getDatabase();
-    await db.runAsync(
-      `UPDATE memories SET title=?, content=?, category=?, custom_tags=?, updated_at=datetime('now') WHERE id=?`,
-      [title, content, category, tags, memory.id]
-    );
+
+    if (isNew) {
+      // 新建模式
+      await insertMemory(db, {
+        version_group_id: '',
+        title: title.trim() || content.trim().slice(0, 20),
+        content: content.trim(),
+        category,
+        custom_tags: tags,
+        workspace: 'default',
+        importance: 0,
+        ai_score: 0,
+        change_summary: '',
+      });
+    } else if (memory) {
+      // 编辑模式
+      await db.runAsync(
+        `UPDATE memories SET title=?, content=?, category=?, custom_tags=?, updated_at=datetime('now') WHERE id=?`,
+        [title, content, category, tags, memory.id]
+      );
+    }
+
     navigation.goBack();
   };
 
   const handleDelete = () => {
+    if (!memory) return;
     Alert.alert('移入回收站', '确定要删除这条记忆吗？7天内可以在回收站恢复。', [
       { text: '取消', style: 'cancel' },
       {
@@ -171,15 +195,19 @@ export function DetailEditScreen() {
         onPress={handleSave}
         style={[styles.saveBtn, { backgroundColor: colors.accent }]}
       >
-        <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '700' }}>保存</Text>
-      </TouchableOpacity>
-
-      {/* 删除按钮 */}
-      <TouchableOpacity onPress={handleDelete} style={{ paddingVertical: 20 }}>
-        <Text style={{ color: colors.danger, textAlign: 'center', fontSize: 15 }}>
-          移入回收站
+        <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '700' }}>
+          {isNew ? '创建' : '保存'}
         </Text>
       </TouchableOpacity>
+
+      {/* 删除按钮（仅编辑模式） */}
+      {!isNew && (
+        <TouchableOpacity onPress={handleDelete} style={{ paddingVertical: 20 }}>
+          <Text style={{ color: colors.danger, textAlign: 'center', fontSize: 15 }}>
+            移入回收站
+          </Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 }

@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Alert } from
 import { useFocusEffect } from '@react-navigation/native';
 import { getDatabase } from '../db/database';
 import { getRecycleBinItems, restoreFromRecycleBin } from '../db/repository';
+import { ScreenWrapper } from '../components/ScreenWrapper';
 import { useAppColors } from '../theme/colors';
 import type { RecycleBinItem } from '../types';
 
@@ -39,17 +40,13 @@ export function TrashScreen() {
     return Math.max(0, remaining);
   };
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.accent} />
-      </View>
-    );
-  }
-
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {items.length === 0 ? (
+    <ScreenWrapper title="回收站">
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={colors.accent} />
+        </View>
+      ) : items.length === 0 ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 32 }}>
           <Text style={{ fontSize: 32, marginBottom: 12 }}>🗑️</Text>
           <Text style={{ fontSize: 15, color: colors.secondaryText, textAlign: 'center' }}>
@@ -86,6 +83,6 @@ export function TrashScreen() {
           contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}
         />
       )}
-    </View>
+    </ScreenWrapper>
   );
 }

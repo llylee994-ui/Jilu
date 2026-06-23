@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getDatabase } from '../db/database';
 import { getActiveMemories, getMemoriesByCategory } from '../db/repository';
+import { ScreenWrapper } from '../components/ScreenWrapper';
 import { MemoryCard } from '../components/MemoryCard';
 import { CategoryChipBar } from '../components/CategoryChip';
 import { useAppColors } from '../theme/colors';
@@ -41,24 +42,42 @@ export function MemoryListScreen() {
     navigation.navigate('DetailEdit', { memoryId: memory.id });
   };
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.accent} />
-      </View>
-    );
-  }
+  const handleNew = () => {
+    navigation.navigate('DetailEdit', {});
+  };
+
+  const newButton = (
+    <TouchableOpacity onPress={handleNew}>
+      <Text style={{ fontSize: 22, color: colors.accent }}>＋</Text>
+    </TouchableOpacity>
+  );
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <ScreenWrapper title="记忆库" rightAction={newButton}>
       <CategoryChipBar selected={filter} onSelect={setFilter} />
 
-      {memories.length === 0 ? (
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={colors.accent} />
+        </View>
+      ) : memories.length === 0 ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 32 }}>
           <Text style={{ fontSize: 32, marginBottom: 12 }}>✨</Text>
           <Text style={{ fontSize: 15, color: colors.secondaryText, textAlign: 'center' }}>
             还没有记忆，去复制点工作内容吧
           </Text>
+          <TouchableOpacity
+            onPress={handleNew}
+            style={{
+              marginTop: 20,
+              backgroundColor: colors.accent,
+              borderRadius: 20,
+              paddingVertical: 12,
+              paddingHorizontal: 24,
+            }}
+          >
+            <Text style={{ color: '#FFFFFF', fontWeight: '700' }}>＋ 手动添加</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <FlatList
@@ -68,6 +87,6 @@ export function MemoryListScreen() {
           contentContainerStyle={{ paddingTop: 8, paddingBottom: 24 }}
         />
       )}
-    </View>
+    </ScreenWrapper>
   );
 }
