@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-24T00:00:00.000Z",
+  "title": "Design System: 迹录 (Jilu)",
+  "extensions": {
+    "colorMeta": {
+      "quiet-blue": {
+        "role": "primary",
+        "displayName": "静蓝 Quiet Blue",
+        "canonical": "oklch(59% 0.17 278)",
+        "tonalRamp": [
+          "oklch(15% 0.04 278)",
+          "oklch(25% 0.07 278)",
+          "oklch(35% 0.10 278)",
+          "oklch(45% 0.13 278)",
+          "oklch(55% 0.16 278)",
+          "oklch(59% 0.17 278)",
+          "oklch(75% 0.08 278)",
+          "oklch(95% 0.02 278)"
+        ]
+      },
+      "morning-light": {
+        "role": "neutral",
+        "displayName": "晨光 Morning Light",
+        "canonical": "oklch(97% 0.004 85)",
+        "tonalRamp": [
+          "oklch(82% 0.006 85)",
+          "oklch(87% 0.005 85)",
+          "oklch(92% 0.004 85)",
+          "oklch(95% 0.004 85)",
+          "oklch(97% 0.004 85)",
+          "oklch(98% 0.003 85)",
+          "oklch(99% 0.002 85)",
+          "oklch(100% 0 0)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "墨色 Ink",
+        "canonical": "oklch(12% 0 0)",
+        "tonalRamp": [
+          "oklch(5% 0 0)",
+          "oklch(10% 0 0)",
+          "oklch(12% 0 0)",
+          "oklch(20% 0 0)",
+          "oklch(35% 0 0)",
+          "oklch(55% 0 0)",
+          "oklch(75% 0 0)",
+          "oklch(95% 0 0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "body": { "displayName": "Body", "purpose": "记忆内容、聊天消息、表单输入。" },
+      "title": { "displayName": "Title", "purpose": "页面标题栏，每个 Tab 顶部的页面名称。" },
+      "label": { "displayName": "Label", "purpose": "分类 Chip、Tab 标签、表单字段名。" },
+      "caption": { "displayName": "Caption", "purpose": "时间戳、AI 角标、辅助元数据。" }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "默认状态过渡，150-250ms。" },
+      { "name": "ease-breathe", "value": "cubic-bezier(0.4, 0, 0.6, 1)", "purpose": "悬浮球呼吸灯：opacity 0.6→0 在 300ms 内完成。" }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "375px", "note": "设计基准宽度，不做平板适配。" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "页面唯一的主操作按钮。胶囊形，静蓝背景，白色文字。",
+      "html": "<button class=\"ds-btn-primary\">🤖 一键智能整理</button>",
+      "css": ".ds-btn-primary { background: #5E7CE6; color: #fff; font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; padding: 14px 24px; border: none; border-radius: 20px; cursor: pointer; width: 100%; transition: opacity 0.2s; } .ds-btn-primary:active { opacity: 0.7; } .ds-btn-primary:disabled { background: #E5E5EA; color: #8E8E93; cursor: not-allowed; }"
+    },
+    {
+      "name": "Category Chip (Default)",
+      "kind": "chip",
+      "refersTo": "chip-default",
+      "description": "分类筛选胶囊。素白底色，薄雾描边，Label 字重。",
+      "html": "<span class=\"ds-chip\">全部</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 6px 14px; background: #fff; color: #1a1a1a; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; border: 1px solid #E5E5EA; border-radius: 20px; white-space: nowrap; transition: background 0.15s, color 0.15s; }"
+    },
+    {
+      "name": "Category Chip (Selected)",
+      "kind": "chip",
+      "refersTo": "chip-selected",
+      "description": "选中的分类胶囊。静蓝背景，白色文字，无描边。",
+      "html": "<span class=\"ds-chip ds-chip-selected\">人脉圈</span>",
+      "css": ".ds-chip-selected { background: #5E7CE6; color: #fff; border-color: transparent; }"
+    },
+    {
+      "name": "Memory Card",
+      "kind": "card",
+      "refersTo": "card-memory",
+      "description": "记忆卡片：12px 圆角，素白背景，16px 内边距。无阴影无描边。",
+      "html": "<div class=\"ds-card\"><span class=\"ds-card-version\">↻ 2个版本</span><h3 class=\"ds-card-title\">张姐-销售部</h3><p class=\"ds-card-body\">张姐从市场部调去了销售部...</p><div class=\"ds-card-meta\"><span>🟣 人脉圈</span><span class=\"ds-card-ai\">🤖 AI整理</span><span>3天前</span></div></div>",
+      "css": ".ds-card { background: #fff; border-radius: 12px; padding: 16px; margin: 0 16px 12px; font-family: system-ui, sans-serif; } .ds-card-version { font-size: 11px; color: #8E8E93; display: block; margin-bottom: 4px; } .ds-card-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin: 0 0 4px; } .ds-card-body { font-size: 14px; line-height: 1.4; color: #8E8E93; margin: 0 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-card-meta { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #8E8E93; } .ds-card-ai { font-size: 11px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "表单输入框：10px 圆角，1px 薄雾描边，12px 内边距。",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"给这段记忆起个标题\" />",
+      "css": ".ds-input { width: 100%; padding: 12px; background: #fff; color: #1a1a1a; font-family: system-ui, sans-serif; font-size: 15px; border: 1px solid #E5E5EA; border-radius: 10px; outline: none; box-sizing: border-box; } .ds-input::placeholder { color: #8E8E93; } .ds-input:focus { border-color: #5E7CE6; }"
+    },
+    {
+      "name": "Chat Bubble (Agent)",
+      "kind": "custom",
+      "refersTo": "message-bubble-agent",
+      "description": "Agent 回复气泡：左对齐，16px 圆角，素白背景。",
+      "html": "<div class=\"ds-bubble-agent\"><span class=\"ds-bubble-label\">Agent</span><p class=\"ds-bubble-text\">已记住 ✨ 「张姐-销售部」分类：👤 人脉圈 关联度：85 分</p><span class=\"ds-bubble-time\">14:32</span></div>",
+      "css": ".ds-bubble-agent { max-width: 82%; background: #fff; border-radius: 16px; padding: 10px 14px; align-self: flex-start; font-family: system-ui, sans-serif; } .ds-bubble-label { font-size: 10px; color: #8E8E93; display: block; margin-bottom: 2px; } .ds-bubble-text { font-size: 15px; line-height: 1.47; color: #1a1a1a; margin: 0; } .ds-bubble-time { font-size: 10px; color: #8E8E93; display: block; margin-top: 3px; }"
+    },
+    {
+      "name": "Chat Bubble (User)",
+      "kind": "custom",
+      "refersTo": "message-bubble-user",
+      "description": "用户消息气泡：右对齐，16px 圆角，静蓝背景，白色文字。",
+      "html": "<div class=\"ds-bubble-user\"><p class=\"ds-bubble-text\">记一下：张姐调去销售部了</p><span class=\"ds-bubble-time\">14:31</span></div>",
+      "css": ".ds-bubble-user { max-width: 82%; background: #5E7CE6; border-radius: 16px; padding: 10px 14px; align-self: flex-end; font-family: system-ui, sans-serif; } .ds-bubble-user .ds-bubble-text { color: #fff; } .ds-bubble-user .ds-bubble-time { color: rgba(255,255,255,0.6); }"
+    },
+    {
+      "name": "Tab Bar",
+      "kind": "nav",
+      "refersTo": "tab-bar",
+      "description": "底部 5 Tab 导航栏，56px 高，hairline 顶部分割线。",
+      "html": "<nav class=\"ds-tab-bar\"><div class=\"ds-tab active\"><svg width=\"24\" height=\"24\"><circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"#5E7CE6\"/></svg><span>聊天</span></div><div class=\"ds-tab\"><svg width=\"24\" height=\"24\"><circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"#8E8E93\" opacity=\"0.4\"/></svg><span>记忆库</span></div></nav>",
+      "css": ".ds-tab-bar { display: flex; justify-content: space-around; align-items: center; height: 56px; background: #fff; border-top: 0.5px solid #E5E5EA; padding-bottom: 4px; font-family: system-ui, sans-serif; } .ds-tab { display: flex; flex-direction: column; align-items: center; gap: 2px; } .ds-tab span { font-size: 11px; font-weight: 600; color: #8E8E93; } .ds-tab.active span { color: #5E7CE6; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "成长的盆栽",
+    "overview": "迹录的视觉系统围绕一盆放在书桌上的小植物构建。它不是花园，不是森林——它是个人的、私密的、正在生长的。界面像花盆一样安静地存在，不为引人注目，只为承载正在生长的东西。这是一个轻量级移动端设计系统：亮暗双模、系统字体、单色强调。它不追求视觉冲击——它追求的是'用过一周后，你不会觉得界面存在'。",
+    "keyCharacteristics": [
+      "单一蓝色强调（≤10% 屏幕面积），其余全部中性色",
+      "亮暗双模同等权重",
+      "圆角像鹅卵石：12px 卡片，20px 按钮",
+      "hairline 分割线几乎看不见",
+      "系统字体，无自定义字体加载"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "静蓝覆盖不超过任何一张屏幕 10% 的面积。它的稀有就是它的力量。", "section": "colors" },
+      { "name": "The Hairline Rule", "body": "所有分割线使用 StyleSheet.hairlineWidth（0.5px） + 薄雾色。", "section": "colors" },
+      { "name": "The No-Font Rule", "body": "禁止引入任何自定义字体文件。系统字体就是最优解。", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "不使用 box-shadow、elevation、或任何投影。用 1-2 级明度差区分层级。", "section": "elevation" }
+    ],
+    "dos": [
+      "Do 使用 hairlineWidth 作为所有分割线宽度",
+      "Do 保持静蓝在每屏 ≤10% 面积",
+      "Do 用明度差而不是阴影来区分层级",
+      "Do 使用系统字体，永远不要加载自定义字体",
+      "Do 暗模和亮模同等重要——每个组件都要在两种模式下测试"
+    ],
+    "donts": [
+      "Don't 引入任何投影、渐变、或玻璃拟态效果",
+      "Don't 使用 border-left 或 border-right 大于 1px 作为彩色装饰条",
+      "Don't 把卡片嵌套在卡片里",
+      "Don't 模仿钉钉/飞书的灰白工作台 + 列表 + 审批流",
+      "Don't 让 Agent 回复超过 4 句话"
+    ]
+  }
+}
